@@ -1,0 +1,57 @@
+.header-tab {
+    display: flex;
+    list-style: none;
+    padding: 0.5rem;
+}
+
+.header-tab li {
+    margin: 0 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.header-tab li.selected-tab {
+    text-decoration: underline;
+    text-decoration-color: #0a5ce9;
+    text-decoration-thickness: 5px;
+    border-radius: 5px;
+}
+
+#filter {
+    display: flex;
+    justify-content: left;
+    margin: 2rem 0;
+}
+
+#pagination {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+#movies-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 2rem;
+    margin: 0 2rem;
+    box-sizing: border-box;
+    padding: 0 0.5rem;
+}
+
+.movie-card {
+    background-color: #fff;
+    box-shadow: 0 2rem 5rem 1rem rgba(0, 0, 0, 0.1);
+    border-radius: 0.7rem;
+    aspect-ratio: 9/16;
+}
+
+.movie-card .movie-card-image img {
+    display: block;             
+    width: 100%;                              
+    object-fit: cover;          
+}
+
+
+.ion-ios-star{
+    color: #f5c518;
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie DB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.0/css/ionicons.min.css"
+        integrity="sha512-JApjWRnfonFeGBY7t4yq8SWr1A6xVYEJgO/UMIYONxaR3C9GETKUg0LharbJncEzJF5Nmiv+Pr5QNulr81LjGQ=="
+        crossorigin="anonymous"/>
+
+</head>
+<body>
+    <h1>Movie DB</h1>
+    <header>
+        <ul class="header-tab">
+            <li id="header-home" class="selected-tab"> HOME </li>
+            <li id="header-liked"> LIKED </li>
+        </ul>
+    </header>
+    
+    <div id="filter">
+        <select id="filter-category">
+            <option value="popular">Popular</option>
+            <option value="now_playing">Now Playing</option>
+            <option value="top_rated">Top Rated</option>
+            <option value="upcoming">Upcoming</option>
+        </select>
+    </div>
+
+    <div id="pagination">
+        <button id="prev-btn">Prev</button>
+        <span id="page-number"></span>
+        <button id="next-btn">Next</button>
+    </div>
+
+    <div id="movies-container">
+        <!-- <div class="movie-card">
+            <div class="movie-card-image">
+
+            </div>
+            <img src="https://via.placeholder.com/150" alt="Movie Poster">
+            <h4>Movie Title</h2>
+            <div class="movie-card-rating">
+                <i class="ion-ios-star"></i>
+                <span>8.5</span>
+            </div>
+            
+            <div class="movie-card-like">
+
+            </div>
+        </div> -->
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
