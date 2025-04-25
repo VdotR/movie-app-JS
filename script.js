@@ -26,6 +26,20 @@ state = {
 }
 
 // Controller
+function loadMovieData() {
+    console.log("Loading movies...");
+    console.log(`Current Filter: ${state.filter}`);
+    fetch(`https://api.themoviedb.org/3/movie/${state.filter}?language=en-US&page=${state.page}`, options)
+        .then(res => res.json())
+        .then(res => {
+            console.log(res)
+            state.movies = res.results;
+            state.totalPages = res.total_pages; 
+            renderView(); 
+        })
+    .catch(err => console.error(err));
+}
+
 
 // View
 // Get all HTML elements
@@ -85,19 +99,6 @@ function loadPagination() {
     pageNumber.innerHTML = `${state.page} / ${state.totalPages}`;
 }
 
-function loadMovieData() {
-    console.log("Loading movies...");
-    console.log(`Current Filter: ${state.filter}`);
-    fetch(`https://api.themoviedb.org/3/movie/${state.filter}?language=en-US&page=${state.page}`, options)
-        .then(res => res.json())
-        .then(res => {
-            console.log(res)
-            state.movies = res.results;
-            state.totalPages = res.total_pages; 
-            renderView(); 
-        })
-    .catch(err => console.error(err));
-}
 
 
 
@@ -110,14 +111,14 @@ function loadMovies() {
             <div class="movie-card-image">
                 <img src="https://image.tmdb.org/t/p/original/${movie.poster_path}" alt="${movie.title}" />
             </div>
-            <h4 class="movie-card-title">${movie.title}</h4>
+            <h3 class="movie-card-title">${movie.title}</h4>
             <div class="movie-card-rating">
                 <div class="rating">
-                    <i class="icon ion-md-star rating-icon"></i>
+                    <i class="ion-ios-star"></i>
                     <span>${movie.vote_average}</span>
                 </div>
                 <div>
-                    <i class="like-icon icon ion-md-heart-empty"></i>
+                    <i class="ion-ios-heart-outline"></i>
                 </div>
             </div>
         </div>
