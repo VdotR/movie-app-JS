@@ -42,10 +42,11 @@
     background-color: #fff;
     box-shadow: 0 2rem 5rem 1rem rgba(0, 0, 0, 0.1);
     border-radius: 0.7rem;
-    aspect-ratio: 18/33;
-    overflow: hidden;
+    aspect-ratio: 17/33;
+    /* overflow: hidden; */
     display: flex;
     flex-direction: column;
+    /* font-size: auto; */
 }
 
 .movie-card .movie-card-title {
@@ -62,7 +63,7 @@
 .movie-card .movie-card-rating{
     display: flex;
     justify-content: space-between;
-    padding: 0.5rem 2rem;
+    padding: 5% 10%;
     margin-top: auto;
     font-size: large;
 }
@@ -70,4 +71,8 @@
 
 .ion-ios-star{
     color: #f5c518;
+}
+
+.ion-ios-heart{
+    color: red
 }

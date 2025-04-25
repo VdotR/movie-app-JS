@@ -6,7 +6,7 @@
  */
 
 // Constants
-const NUM_MOVIES_PER_PAGE = 20;
+// const NUM_MOVIES_PER_PAGE = 20;
 const API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMGFjODk0NmYyMGJhZDllYWE0ZWU5OGFhZDkxYTBlNSIsIm5iZiI6MTY5NTc5NDI1OS40OTQwMDAyLCJzdWIiOiI2NTEzYzQ1MzA0OTlmMjAwYWJiY2RiNjMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.B9sk5tEzxU694-hrdT_vfMh9NGTi4GOBFK-9Z1WsvmA";
 const options = {
     method: 'GET',
@@ -22,7 +22,8 @@ state = {
     likedMovies : [],
     filter : "popular",
     page : 1,
-    totalPages : 0
+    totalPages : 0,
+    tab: "home"
 }
 
 // Controller
@@ -60,13 +61,26 @@ const pageNumber = document.querySelector("#page-number");
 // Movie Container
 const moviesContainer = document.querySelector("#movies-container");
 
-headerTabs.addEventListener("click", (e) => {
-    if (e.target.id === "header-home") {
-        console.log("Home");
-    } else if (e.target.id === "header-liked") {
-        console.log("Liked");
-    }
-});
+function handleHeader() {
+    headerTabs.addEventListener("click", (e) => {
+        if (e.target.id === "header-home") {
+            state.tab = "home";
+            
+            // Reset selected-tab
+            headerHome.classList.add("selected-tab");
+            headerLiked.classList.remove("selected-tab");
+
+            loadMovieData(); 
+        } else if (e.target.id === "header-liked") {
+            state.tab = "like";
+
+            // Reset selected-tab
+            headerLiked.classList.add("selected-tab");
+            headerHome.classList.remove("selected-tab");
+            renderView(); // Just need to render the view, no API call required
+        }
+    });
+}
 
 function handleFilter() {
     filterSelect.addEventListener("change", (e) => {
@@ -100,31 +114,73 @@ function loadPagination() {
 }
 
 
+function checkMovieLikeStatus(movieId) {
+    return state.likedMovies.find(movie => Number(movie.id) === Number(movieId)) ? true : false;
+}
 
+function makeMovieCard(movie) {
+    return `<div class="movie-card" id="${movie.id}">
+                <div class="movie-card-image">
+                    <img src="https://image.tmdb.org/t/p/original/${movie.poster_path}" alt="${movie.title}" />
+                </div>
+                <h4 class="movie-card-title">${movie.title}</h4>
+                <div class="movie-card-rating">
+                    <div class="rating">
+                        <i class="ion-ios-star"></i>
+                        <span>${movie.vote_average}</span>
+                    </div>
+                    <div class="like-section">
+                        <i class="like-icon ${checkMovieLikeStatus(movie.id) ? 'ion-ios-heart' : 'ion-ios-heart-outline'}"></i>
+                    </div>
+                </div>
+            </div>`
+}
 
 function loadMovies() {
-
     let moviesHTML = "";
-    state.movies.forEach(movie => {
-        moviesHTML += `
-            <div class="movie-card">
-            <div class="movie-card-image">
-                <img src="https://image.tmdb.org/t/p/original/${movie.poster_path}" alt="${movie.title}" />
-            </div>
-            <h3 class="movie-card-title">${movie.title}</h4>
-            <div class="movie-card-rating">
-                <div class="rating">
-                    <i class="ion-ios-star"></i>
-                    <span>${movie.vote_average}</span>
-                </div>
-                <div>
-                    <i class="ion-ios-heart-outline"></i>
-                </div>
-            </div>
-        </div>
-        `;
-    });
+    if (state.tab === "home") {
+        state.movies.forEach(movie => {
+            moviesHTML += makeMovieCard(movie);
+        });
+    } else if (state.tab === "like") {
+        state.likedMovies.forEach(movie => {
+            moviesHTML += makeMovieCard(movie);
+        });
+    }
+    
     moviesContainer.innerHTML = moviesHTML;
+}
+
+function handleMovieContainer() {
+    moviesContainer.addEventListener("click", (e) => {
+        console.log("e.target: ", e.target);
+        if (e.target.classList.contains("like-icon")) {
+            const movieCard = e.target.closest(".movie-card");
+            const movieId = movieCard.id;
+            if (checkMovieLikeStatus(movieId)) {
+                // Remove from liked movies
+                state.likedMovies = state.likedMovies.filter(movie => Number(movie.id) !== Number(movieId));
+                e.target.classList.remove("ion-ios-heart");
+                e.target.classList.add("ion-ios-heart-outline");
+            } else {
+                const movieTitle = movieCard.querySelector(".movie-card-title").innerText;
+                const movieRating = movieCard.querySelector(".movie-card-rating span").innerText;
+                const moviePoster = movieCard.querySelector(".movie-card-image img").src;
+
+                // Add to liked movies
+                state.likedMovies.push({
+                    id: movieCard.id,
+                    title: movieTitle,
+                    vote_average: movieRating,
+                    poster_path: moviePoster
+                });
+            }
+            
+            renderView(); // Re-render the view to show the updated liked movies
+            // console.log(`clicked on like icon of movie ${movieTitle}`);
+            // console.log("Liked Movies:", state.likedMovies);
+        }
+    });
 }
 
 // For now, every time we render View, we will make an API call to fetch the movies
@@ -135,57 +191,59 @@ function renderView() {
 
 function init() {
     loadMovieData();
+    handleHeader();
     handleFilter();
     handlePagination();
+    handleMovieContainer();
 }
 
 init();
 
-// Testing
+// // Testing
 
-function generateMovieCards() {
-    const moviesContainer = document.getElementById('movies-container');
+// function generateMovieCards() {
+//     const moviesContainer = document.getElementById('movies-container');
     
-    // Clear any existing content
-    moviesContainer.innerHTML = '';
+//     // Clear any existing content
+//     moviesContainer.innerHTML = '';
     
-    // Sample movie titles
-    const sampleTitles = [
-        "Inception", "The Dark Knight", "Pulp Fiction", "The Godfather",
-        "Interstellar", "The Matrix", "Parasite", "Avengers: Endgame",
-        "The Lion King", "Fight Club", "Forrest Gump", "Goodfellas",
-        "The Shawshank Redemption", "Titanic", "Jurassic Park", 
-        "Star Wars", "The Avengers", "Avatar", "Joker", "Toy Story"
-    ];
+//     // Sample movie titles
+//     const sampleTitles = [
+//         "Inception", "The Dark Knight", "Pulp Fiction", "The Godfather",
+//         "Interstellar", "The Matrix", "Parasite", "Avengers: Endgame",
+//         "The Lion King", "Fight Club", "Forrest Gump", "Goodfellas",
+//         "The Shawshank Redemption", "Titanic", "Jurassic Park", 
+//         "Star Wars", "The Avengers", "Avatar", "Joker", "Toy Story"
+//     ];
     
-    // Sample HTML for 20 cards
-    let cardsHTML = '';
+//     // Sample HTML for 20 cards
+//     let cardsHTML = '';
     
-    for (let i = 0; i < 20; i++) {
-        // Generate random rating between 6.0 and 9.5
-        const rating = (Math.random() * 3.5 + 6.0).toFixed(1);
+//     for (let i = 0; i < 20; i++) {
+//         // Generate random rating between 6.0 and 9.5
+//         const rating = (Math.random() * 3.5 + 6.0).toFixed(1);
         
-        cardsHTML += `
-        <div class="movie-card">
-            <div class="movie-card-image">
-                <img src="https://cdn11.bigcommerce.com/s-yzgoj/images/stencil/1280x1280/products/2920525/5964222/MOVAJ2095__61756.1679606794.jpg?c=2" alt="${sampleTitles[i]} Poster">
-            </div>
-            <h4 class="movie-card-title">${sampleTitles[i]}</h4>
-            <div class="movie-card-rating">
-                <div class="rating">
-                    <i class="ion-ios-infinite-outline"></i>
-                    <span>${rating}</span>
-                </div>
-                <div>
-                    <i class="like-icon icon ion-ios-heart-empty"></i>
-                </div>
-            </div>
-        </div>`;
-    }
+//         cardsHTML += `
+//         <div class="movie-card">
+//             <div class="movie-card-image">
+//                 <img src="https://cdn11.bigcommerce.com/s-yzgoj/images/stencil/1280x1280/products/2920525/5964222/MOVAJ2095__61756.1679606794.jpg?c=2" alt="${sampleTitles[i]} Poster">
+//             </div>
+//             <h4 class="movie-card-title">${sampleTitles[i]}</h4>
+//             <div class="movie-card-rating">
+//                 <div class="rating">
+//                     <i class="ion-ios-infinite-outline"></i>
+//                     <span>${rating}</span>
+//                 </div>
+//                 <div>
+//                     <i class="like-icon icon ion-ios-heart-empty"></i>
+//                 </div>
+//             </div>
+//         </div>`;
+//     }
     
-    // Add all cards to container
-    moviesContainer.innerHTML = cardsHTML;
-}
+//     // Add all cards to container
+//     moviesContainer.innerHTML = cardsHTML;
+// }
 
 // Call the function to generate cards
 //generateMovieCards();
