@@ -54,6 +54,13 @@
     padding: 0 0.5rem;
 }
 
+.movie-card .movie-card-title:hover {
+    text-decoration: underline;
+    text-decoration-color: lightblue;
+    text-decoration-thickness: 3px;
+    cursor: pointer;
+}
+
 .movie-card .movie-card-image img {
     display: block;             
     width: 100%;                              

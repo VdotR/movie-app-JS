@@ -157,12 +157,16 @@ function handleMovieContainer() {
         if (e.target.classList.contains("like-icon")) {
             const movieCard = e.target.closest(".movie-card");
             const movieId = movieCard.id;
+            
+            // Logic to handle unlike
             if (checkMovieLikeStatus(movieId)) {
                 // Remove from liked movies
                 state.likedMovies = state.likedMovies.filter(movie => Number(movie.id) !== Number(movieId));
                 e.target.classList.remove("ion-ios-heart");
                 e.target.classList.add("ion-ios-heart-outline");
-            } else {
+            } 
+            // Logic to handle like
+            else {
                 const movieTitle = movieCard.querySelector(".movie-card-title").innerText;
                 const movieRating = movieCard.querySelector(".movie-card-rating span").innerText;
                 const moviePoster = movieCard.querySelector(".movie-card-image img").src;
@@ -177,8 +181,13 @@ function handleMovieContainer() {
             }
             
             renderView(); // Re-render the view to show the updated liked movies
-            // console.log(`clicked on like icon of movie ${movieTitle}`);
-            // console.log("Liked Movies:", state.likedMovies);
+        }
+        else if (e.target.classList.contains("movie-card-title")){
+            const movieCard = e.target.closest(".movie-card");
+            const movieId = movieCard.id;
+            console.log("Clicked on title of Movie ID: ", movieId);
+            // Logic to handle movie card title click
+            // For now, just log the movie ID
         }
     });
 }
