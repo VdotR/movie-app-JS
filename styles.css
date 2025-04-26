@@ -1,3 +1,7 @@
+html, body {
+    font-family: system-ui, Arial;
+}
+
 .header-tab {
     display: flex;
     list-style: none;
@@ -174,4 +178,12 @@
 
 .hidden {
     display: none;
+}
+
+footer {
+    margin: 2rem ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5rem;
 }
