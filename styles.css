@@ -81,7 +81,7 @@ body {
 }
 
 .movie-card .movie-card-title:hover {
-    color: rgb(42, 160, 42);
+    color: #0a5ce9;
     cursor: pointer;
 }
 
