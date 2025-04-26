@@ -1,4 +1,4 @@
-html, body {
+body {
     font-family: system-ui, Arial;
 }
 
@@ -160,13 +160,13 @@ html, body {
 }
 
 .production-companies-list {
-    display: flex;           /* horizontal layout */
-    flex-wrap: wrap;         /* wrap to new line when needed */
-    list-style: none;        /* remove bullets */
-    margin: 0;               /* reset default UL margins */
-    padding: 0;              /* reset default UL padding */
-    gap: 1rem;               /* space between logos */
-    align-items: center;     /* vertically center them if different heights */
+    display: flex;           /* horizontal layout, remove all bullets*/
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1rem;
+    align-items: center;
 }
 
 .production-company img {

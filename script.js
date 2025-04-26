@@ -3,6 +3,7 @@
  * This script fetches movie data from the Movie DB API and displays it on a web page.
  * It includes functions to fetch movies, display them, and handle user interactions.
  * It follows MVC architecture
+ * Created by Victor Ren
  */
 
 // Constants
@@ -24,7 +25,6 @@ state = {
     page : 1,
     totalPages : 0,
     tab: "home",
-    // displayDetails: false,
     movieDetails: {}
 }
 
@@ -199,7 +199,14 @@ function renderMovies() {
 }
 
 function makeMovieDetailGenresList(genres) {
+    return genres.map(genre => `<li class="movie-detail-genre">${genre}</li>`).join("\n")
 }
+
+function makeMovieDetailProductionCompaniesList(companies) {
+    return companies.map(company => `<li class="production-company"><img src="https://image.tmdb.org/t/p/original/${company}"/></li>`).join("\n")
+}
+
+
 function renderMovieDetails() {
     if (isBackDropEnabled()) {
         const movieDetailsHTML = `
@@ -217,7 +224,7 @@ function renderMovieDetails() {
                     <div class="movie-detail-genre-container">
                         <h3>Genres</h3>
                         <ul class="movie-detail-genres-list">
-                            ${state.movieDetails.genres.map(genre => `<li class="movie-detail-genre">${genre}</li>`).join("\n")} 
+                            ${makeMovieDetailGenresList(state.movieDetails.genres)} 
                         </ul>
                     </div>
                     <div class="movie-detail-rating">
@@ -228,7 +235,7 @@ function renderMovieDetails() {
                     <div class="production-companies">
                         <h3> Production Companies </h3>
                         <ul class="production-companies-list">
-                            ${state.movieDetails.production_companies.map(company => `<li class="production-company"><img src="https://image.tmdb.org/t/p/original/${company}"/></li>`).join("\n")}
+                            ${makeMovieDetailProductionCompaniesList(state.movieDetails.production_companies)}
                         </ul>
                     </div>
                 </div>
@@ -296,6 +303,6 @@ function init() {
     handleMovieContainer();
     handleBackDrop();
 }
-//console.log(loadMovieDetails(950387))
+
 init();
 
