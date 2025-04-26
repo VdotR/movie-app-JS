@@ -305,4 +305,3 @@ function init() {
 }
 
 init();
-

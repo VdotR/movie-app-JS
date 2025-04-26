@@ -2,15 +2,27 @@ body {
     font-family: system-ui, Arial;
 }
 
+.title-container{
+    display: flex;
+    justify-content: center;
+}
+
 .header-tab {
     display: flex;
     list-style: none;
     padding: 0.5rem;
+    height: 5rem;
+    align-items: center;
 }
 
 .header-tab li {
     margin: 0 1rem;
     padding: 0.5rem 1rem;
+}
+
+#header-logo img {
+    height: 4rem;
+    width: 4rem;
 }
 
 .header-tab li.selected-tab {
