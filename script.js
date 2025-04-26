@@ -23,7 +23,9 @@ state = {
     filter : "popular",
     page : 1,
     totalPages : 0,
-    tab: "home"
+    tab: "home",
+    // displayDetails: false,
+    movieDetails: {}
 }
 
 // Controller
@@ -38,6 +40,24 @@ function loadMovieData() {
             state.totalPages = res.total_pages; 
             renderView(); 
         })
+    .catch(err => console.error(err));
+}
+
+function loadMovieDetails(movieId) {
+    fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=en-US`, options)
+    .then(res => res.json())
+    .then(res => {
+        console.log(res);
+        enableBackDrop();
+        state.movieDetails.poster_path = res.poster_path;
+        state.movieDetails.title = res.title;
+        state.movieDetails.overview = res.overview;
+        state.movieDetails.genres = res.genres.map(genre => genre.name);
+        state.movieDetails.vote_average = res.vote_average;
+        state.movieDetails.production_companies = res.production_companies.map(company => company.logo_path)
+        console.log(state.movieDetails);
+        renderMovieDetails();
+    })
     .catch(err => console.error(err));
 }
 
@@ -60,6 +80,24 @@ const pageNumber = document.querySelector("#page-number");
 
 // Movie Container
 const moviesContainer = document.querySelector("#movies-container");
+
+// Movie Details
+const backDrop = document.querySelector(".backdrop");
+const movieDetailsContainer = document.querySelector(".movie-detail");
+const closeBtn = document.querySelector(".close-btn");
+
+function isBackDropEnabled() {
+    return !backDrop.classList.contains("hidden");
+}
+
+function enableBackDrop() {
+    backDrop.classList.remove("hidden");
+}
+
+function disableBackDrop() {
+    backDrop.classList.add("hidden");
+    renderMovieDetails(); // Clear the backdrop content
+}
 
 function handleHeader() {
     headerTabs.addEventListener("click", (e) => {
@@ -108,8 +146,17 @@ function handlePagination() {
     });
 }
 
+function handleBackDrop() {
+    backDrop.addEventListener("click", (e) => {
+        if (e.target.classList.contains("close-btn")) {
+            console.log("Close button clicked");
+            disableBackDrop();
+        }
+    });
+}
 
-function loadPagination() {
+
+function renderPagination() {
     pageNumber.innerHTML = `${state.page} / ${state.totalPages}`;
 }
 
@@ -136,7 +183,7 @@ function makeMovieCard(movie) {
             </div>`
 }
 
-function loadMovies() {
+function renderMovies() {
     let moviesHTML = "";
     if (state.tab === "home") {
         state.movies.forEach(movie => {
@@ -150,6 +197,48 @@ function loadMovies() {
     
     moviesContainer.innerHTML = moviesHTML;
 }
+
+function makeMovieDetailGenresList(genres) {
+}
+function renderMovieDetails() {
+    if (isBackDropEnabled()) {
+        const movieDetailsHTML = `
+            <button class="close-btn">x</button>
+            <div class="movie-detail-info">
+                <div class="movie-detail-poster">
+                    <img src="https://image.tmdb.org/t/p/original/${state.movieDetails.poster_path}" alt="${state.movieDetails.title}" />
+                </div>  
+                <div class="movie-detail-nonposter">
+                    <h2 class> ${state.movieDetails.title} </h2>
+                    <div class="movie-detail-overview">
+                        <h3>Overview</h3>
+                        <p>${state.movieDetails.overview}</p>
+                    </div>
+                    <div class="movie-detail-genre-container">
+                        <h3>Genres</h3>
+                        <ul class="movie-detail-genres-list">
+                            ${state.movieDetails.genres.map(genre => `<li class="movie-detail-genre">${genre}</li>`).join("\n")} 
+                        </ul>
+                    </div>
+                    <div class="movie-detail-rating">
+                        <h3>Rating</h3>
+                        <i class="ion-ios-star"></i>
+                        <span>${state.movieDetails.vote_average}</span>
+                    </div>
+                    <div class="production-companies">
+                        <h3> Production Companies </h3>
+                        <ul class="production-companies-list">
+                            ${state.movieDetails.production_companies.map(company => `<li class="production-company"><img src="https://image.tmdb.org/t/p/original/${company}"/></li>`).join("\n")}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        `;
+        movieDetailsContainer.innerHTML = movieDetailsHTML;
+    } else {
+        movieDetailsContainer.innerHTML = "";
+    }
+} 
 
 function handleMovieContainer() {
     moviesContainer.addEventListener("click", (e) => {
@@ -187,15 +276,16 @@ function handleMovieContainer() {
             const movieId = movieCard.id;
             console.log("Clicked on title of Movie ID: ", movieId);
             // Logic to handle movie card title click
-            // For now, just log the movie ID
+            // Load movie details
+            loadMovieDetails(movieId);
         }
     });
 }
 
 // For now, every time we render View, we will make an API call to fetch the movies
 function renderView() {
-    loadPagination();
-    loadMovies();
+    renderPagination();
+    renderMovies();
 }
 
 function init() {
@@ -204,6 +294,8 @@ function init() {
     handleFilter();
     handlePagination();
     handleMovieContainer();
+    handleBackDrop();
 }
-
+//console.log(loadMovieDetails(950387))
 init();
+

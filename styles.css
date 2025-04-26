@@ -55,9 +55,7 @@
 }
 
 .movie-card .movie-card-title:hover {
-    text-decoration: underline;
-    text-decoration-color: lightblue;
-    text-decoration-thickness: 3px;
+    color: rgb(42, 160, 42);
     cursor: pointer;
 }
 
@@ -82,4 +80,98 @@
 
 .ion-ios-heart{
     color: red
+}
+
+.backdrop {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.movie-detail{
+    width: 60rem;
+    height: 30rem;
+    background-color: white;
+    opacity: 1;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2rem;
+    width: 2rem;
+    font-size: 1.5rem;
+    color: white;
+    background-color: red;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.movie-detail-info {
+    display: flex;
+    /* optionally center vertically: */
+    align-items: flex-start;
+}
+
+/* make the poster panel 35% of the width */
+.movie-detail-poster {
+    flex: 0 0 35%;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.movie-detail-poster img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.movie-detail-genres-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.movie-detail-genre {
+    background: lightblue;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.production-companies-list {
+    display: flex;           /* horizontal layout */
+    flex-wrap: wrap;         /* wrap to new line when needed */
+    list-style: none;        /* remove bullets */
+    margin: 0;               /* reset default UL margins */
+    padding: 0;              /* reset default UL padding */
+    gap: 1rem;               /* space between logos */
+    align-items: center;     /* vertically center them if different heights */
+}
+
+.production-company img {
+    display: block;
+    height: 2rem;            /* fixed height and width */
+    width: 2rem;             
+    object-fit: contain;
+}
+
+.hidden {
+    display: none;
 }
