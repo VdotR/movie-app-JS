@@ -43,6 +43,16 @@ body {
     justify-content: center;
     gap: 1rem;
     margin: 2rem 0;
+    align-items: center;
+}
+
+#pagination button {
+    background-color: #0a5ce9;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 #movies-container {
