@@ -30,12 +30,12 @@ state = {
 
 // Controller
 function loadMovieData() {
-    console.log("Loading movies...");
-    console.log(`Current Filter: ${state.filter}`);
+    // console.log("Loading movies...");
+    // console.log(`Current Filter: ${state.filter}`);
     fetch(`https://api.themoviedb.org/3/movie/${state.filter}?language=en-US&page=${state.page}`, options)
         .then(res => res.json())
         .then(res => {
-            console.log(res)
+            // console.log(res)
             state.movies = res.results;
             state.totalPages = res.total_pages; 
             renderView(); 
@@ -47,7 +47,7 @@ function loadMovieDetails(movieId) {
     fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=en-US`, options)
     .then(res => res.json())
     .then(res => {
-        console.log(res);
+        // console.log(res);
         enableBackDrop();
         state.movieDetails.poster_path = res.poster_path;
         state.movieDetails.title = res.title;
@@ -55,7 +55,7 @@ function loadMovieDetails(movieId) {
         state.movieDetails.genres = res.genres.map(genre => genre.name);
         state.movieDetails.vote_average = res.vote_average;
         state.movieDetails.production_companies = res.production_companies.map(company => company.logo_path)
-        console.log(state.movieDetails);
+        // console.log(state.movieDetails);
         renderMovieDetails();
     })
     .catch(err => console.error(err));
@@ -126,7 +126,7 @@ function handleFilter() {
         state.filter = selectedFilter;
         state.page = 1; // Reset page to 1 when filter changes per requirements
         loadMovieData();
-        console.log("Selected filter:", state.filter);
+        // console.log("Selected filter:", state.filter);
     });
 }
 
@@ -149,7 +149,7 @@ function handlePagination() {
 function handleBackDrop() {
     backDrop.addEventListener("click", (e) => {
         if (e.target.classList.contains("close-btn")) {
-            console.log("Close button clicked");
+            // console.log("Close button clicked");
             disableBackDrop();
         }
     });
@@ -249,7 +249,7 @@ function renderMovieDetails() {
 
 function handleMovieContainer() {
     moviesContainer.addEventListener("click", (e) => {
-        console.log("e.target: ", e.target);
+        // console.log("e.target: ", e.target);
         if (e.target.classList.contains("like-icon")) {
             const movieCard = e.target.closest(".movie-card");
             const movieId = movieCard.id;
@@ -281,7 +281,7 @@ function handleMovieContainer() {
         else if (e.target.classList.contains("movie-card-title")){
             const movieCard = e.target.closest(".movie-card");
             const movieId = movieCard.id;
-            console.log("Clicked on title of Movie ID: ", movieId);
+            // console.log("Clicked on title of Movie ID: ", movieId);
             // Logic to handle movie card title click
             // Load movie details
             loadMovieDetails(movieId);
